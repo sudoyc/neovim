@@ -1,2 +1,0 @@
-return { "cpp.build_run", "cpp.build", "cpp.run" }
--- return { "cpp.run" }

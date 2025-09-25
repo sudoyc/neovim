@@ -1,5 +1,0 @@
-vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
-  pattern = { "*.cpp" },
-  command = ":0r ~/.skeleton.cpp"
-})
-return {}
