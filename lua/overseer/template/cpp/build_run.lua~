@@ -1,0 +1,35 @@
+return {
+  name = "g++ build run",
+  builder = function()
+    -- local overseer = require("overseer")
+    -- local task = overseer.new_task({
+    --   name = "g++ build and run"
+    --   strategy = {
+    --     "orchestrator",
+    --     tasks = {
+    --       "g++ build",
+    --       "g++ run",
+    --     },
+    --   },
+    -- })
+    -- task:start()
+    return {
+      name = "g++ build and run",
+      cmd = {},
+      components = {
+        {
+          "dependencies",
+          task_names = {
+            "g++ build",
+            "g++ run"
+          },
+          sequential = true,
+        },
+        "default"
+      },
+    }
+  end,
+  condition = {
+    filetype = { "cpp" },
+  },
+}
