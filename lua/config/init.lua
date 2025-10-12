@@ -1,4 +1,7 @@
 local M = {
+  scrolloff      = 5,
+  cmdheight      = 0,
+  virtualedit    = "onemore",
   number         = true,
   relativenumber = true,
   expandtab      = true,
@@ -34,7 +37,7 @@ vim.cmd.colorscheme("tokyonight")
 vim.lsp.enable("clangd")
 vim.lsp.enable("lua_ls")
 
-local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+-- local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 -- for type, icon in pairs(signs) do
 --   local hl = "LspDiagnosticsSign" .. type
 --   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
@@ -57,10 +60,10 @@ vim.diagnostic.config({
   },
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = signs.Error,
-      [vim.diagnostic.severity.WARN] = signs.Warn,
-      [vim.diagnostic.severity.INFO] = signs.Info,
-      [vim.diagnostic.severity.HINT] = signs.Hint,
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN]  = "",
+      [vim.diagnostic.severity.INFO]  = "",
+      [vim.diagnostic.severity.HINT]  = "",
     },
   }
 })
@@ -71,5 +74,20 @@ vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGai
   command = "if mode() != 'c' | checktime | endif",
   pattern = { "*" },
 })
+
+-- save the cursor posistion
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local lcount = vim.api.nvim_buf_line_count(0)
+    if mark[1] > 0 and mark[1] <= lcount then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
+
+vim.opt.pumblend = 10 -- 半透明效果（可選）
+vim.opt.completeopt = { 'menu', 'menuone', 'noselect', 'noinsert' }
+vim.opt.wildoptions:append('pum') -- 啟用浮動而非壓縮
 
 return {}

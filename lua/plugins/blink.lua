@@ -51,6 +51,8 @@ return {
       preset = 'none',
       ['<C-n>'] = { 'select_next', 'fallback' },
       ['<C-p>'] = { 'select_prev', 'fallback' },
+      ['<C-j>'] = { 'snippet_forward', 'fallback' },
+      ['<C-p>'] = { 'snippet_backward', 'fallback' },
       ['<Tab>'] = { 'accept', 'fallback' },
       -- ['<S-Enter>'] = { 'accept', 'fallback' },
     },
@@ -64,7 +66,9 @@ return {
     -- (Default) Only show the documentation popup when manually triggered
     completion = {
       documentation = { auto_show = false },
-      ghost_text = { enabled = true },
+      ghost_text = {
+        enabled = true,
+      },
       list = {
         selection = { preselect = true, auto_insert = false },
       }

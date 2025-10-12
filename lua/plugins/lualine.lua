@@ -1,7 +1,7 @@
 return {
   "nvim-lualine/lualine.nvim",
   lazy = true,
-  event = "BufWinEnter",
+  event = "BufRead",
   config = function()
     local window = function ()
       return vim.api.nvim_win_get_number(0)
