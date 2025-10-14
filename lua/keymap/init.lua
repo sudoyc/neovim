@@ -16,7 +16,7 @@ for i=1,9,1 do
   set("n", "<leader>"..i, i.."<C-w><C-w>")
 end
 
-set("n", "<leader>r", function()
+set("n", "<leader>n", function()
   vim.cmd("CompetiTest run")
 end)
 
