@@ -16,7 +16,7 @@ for i=1,9,1 do
   set("n", "<leader>"..i, i.."<C-w><C-w>")
 end
 
-set("n", "<leader>n", function()
+set("n", "<leader>i", function()
   vim.cmd("CompetiTest run")
 end)
 
@@ -24,30 +24,36 @@ set("n", "<leader>c", function()
   vim.cmd("CompetiTest receive testcases")
 end)
 
-local toggleterm = require("toggleterm")
+-- local toggleterm = require("toggleterm")
 
-local function run(exec)
-  local cmd = vim.fn.system
-  if vim.fn.filereadable("/tmp/kitty-nvim") == 0 then
-    cmd("kitty --detach --listen-on unix:/tmp/kitty-nvim")
-    vim.wait(500)
-  else
-    cmd("kitty @ --to unix:/tmp/kitty-nvim send-text "..'"'..exec..'\n"')
-  end
-end
+-- local function run(exec)
+--   local cmd = vim.fn.system
+--   if vim.fn.filereadable("/tmp/kitty-nvim") == 0 then
+--     cmd("kitty --detach --listen-on unix:/tmp/kitty-nvim")
+--     vim.wait(500)
+--   else
+--     cmd("kitty @ --to unix:/tmp/kitty-nvim send-text "..'"'..exec..'\n"')
+--   end
+-- end
 
 set("n", "<leader>b", function()
-  local dir = vim.fn.expand("%:p:h")
-  local file = vim.fn.expand("%:p")
-  run("cd "..'\\"'..dir..'\\"')
-  run('clear')
-  run("g++ "..'\\"'..file..'\\"'.." -O2 -fsanitize=address,undefined")
-  if vim.fn.filereadable("input.txt") == 1 then
-    run("./a.out < input.txt > output.txt")
-  else
-    run("./a.out")
+  if (vim.b.run_command ~= nil) then
+    vim.b.run_command()
   end
 end)
+
+-- set("n", "<leader>b", function()
+--   local dir = vim.fn.expand("%:p:h")
+--   local file = vim.fn.expand("%:p")
+--   run("cd "..'\\"'..dir..'\\"')
+--   run('clear')
+--   run("g++ "..'\\"'..file..'\\"'.." -O2 -fsanitize=address,undefined")
+--   if vim.fn.filereadable("input.txt") == 1 then
+--     run("./a.out < input.txt > output.txt")
+--   else
+--     run("./a.out")
+--   end
+-- end)
 
 -- set("n", "<leader>b", function()
   --   local dir = vim.fn.expand("%:p:h")
