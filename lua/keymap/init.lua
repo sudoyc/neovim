@@ -12,8 +12,10 @@ set("n", "<leader>s", "<C-w>s")
 
 set("n", "<leader>q", "<C-w>q")
 
-for i=1,9,1 do
-  set("n", "<leader>"..i, i.."<C-w><C-w>")
+set("n", "<leader>w", "<Cmd>w<CR>", { noremap = true, silent = true })
+
+for i = 1, 9, 1 do
+  set("n", "<leader>" .. i, i .. "<C-w><C-w>")
 end
 
 set("n", "<leader>i", function()
@@ -37,10 +39,21 @@ end)
 -- end
 
 set("n", "<leader>b", function()
+  vim.cmd("cd %:h")
   if (vim.b.run_command ~= nil) then
     vim.b.run_command()
   end
-end)
+end, {
+  silent = true,
+  noremap = true,
+})
+
+set("n", "<leader>ft", function()
+  vim.lsp.buf.format({ async = true })
+end, {
+  silent = true,
+  noremap = true,
+})
 
 -- set("n", "<leader>b", function()
 --   local dir = vim.fn.expand("%:p:h")
@@ -55,14 +68,16 @@ end)
 --   end
 -- end)
 
+
 -- set("n", "<leader>b", function()
-  --   local dir = vim.fn.expand("%:p:h")
-  --   local file = vim.fn.expand("%:p")
-  --   toggleterm.exec("clear")
-  --   toggleterm.exec("cd "..dir)
-  --   toggleterm.exec("g++ "..file.." -O2 -fsanitize=address && ./a.out < input.txt > output.txt")
-  -- end)
+--   local dir = vim.fn.expand("%:p:h")
+--   local file = vim.fn.expand("%:p")
+--   toggleterm.exec("clear")
+--   toggleterm.exec("cd "..dir)
+--   toggleterm.exec("g++ "..file.." -O2 -fsanitize=address && ./a.out < input.txt > output.txt")
+-- end)
 
-  set("n", "<leader>y", "\"+y")
+set({"n", "v"}, "<leader>y", "\"+y")
+set({"n", "v"}, "<leader>p", "\"+p")
 
-  return {}
+return {}
