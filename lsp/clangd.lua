@@ -63,7 +63,9 @@ end
 
 ---@type vim.lsp.Config
 return {
-  cmd = { 'clangd' },
+  cmd = {
+    'clangd',
+  },
   filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
   root_markers = {
     '.clangd',
@@ -96,5 +98,11 @@ return {
     vim.api.nvim_buf_create_user_command(bufnr, 'LspClangdShowSymbolInfo', function()
       symbol_info(bufnr, client)
     end, { desc = 'Show symbol info' })
+
+    -- if client.server_capabilities.semanticTokensProvider then
+    --   vim.lsp.semantic_tokens.start(bufnr, client.id)
+    -- end
+
+    vim.lsp.buf.format({ async = true })
   end,
 }

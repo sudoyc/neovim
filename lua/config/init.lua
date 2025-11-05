@@ -36,6 +36,7 @@ vim.cmd.colorscheme("tokyonight")
 
 vim.lsp.enable("clangd")
 vim.lsp.enable("lua_ls")
+vim.lsp.enable("pyright")
 
 -- local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 -- for type, icon in pairs(signs) do
