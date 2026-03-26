@@ -1,5 +1,7 @@
 return {
   "saxon1964/neovim-tips",
+  -- lazy = true,
+  enabled = false,
   version = "*", -- Only update on tagged releases
   dependencies = {
     "MunifTanjim/nui.nvim",

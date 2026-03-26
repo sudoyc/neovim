@@ -65,6 +65,7 @@ end
 return {
   cmd = {
     'clangd',
+    -- '-std=c++20',
   },
   filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
   root_markers = {
@@ -103,6 +104,6 @@ return {
     --   vim.lsp.semantic_tokens.start(bufnr, client.id)
     -- end
 
-    vim.lsp.buf.format({ async = true })
+    -- vim.lsp.buf.format({ async = true })
   end,
 }

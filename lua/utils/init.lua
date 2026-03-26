@@ -1,11 +1,25 @@
 return {
   run = function(exec)
-    local cmd = vim.fn.system
-    if vim.fn.filereadable("/tmp/kitty-nvim") == 0 then
-      cmd("kitty --detach --listen-on unix:/tmp/kitty-nvim")
-      vim.wait(500)
-    else
-      cmd("kitty @ --to unix:/tmp/kitty-nvim send-text "..'"'..exec..'\n"')
+    _G.terminal_startinsert_able = false
+    if term:is_open() == false then
+      term:open()
+      -- vim.schedule(function()
+      --   vim.cmd("wincmd p")
+      -- end)
+      -- vim.api.nvim_feedkeys(
+      --   vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true),
+      --   "n",
+      --   true
+      -- )
+      -- vim.cmd("wincmd p")
     end
+    term:send(exec)
+    vim.api.nvim_feedkeys(
+      vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true),
+      "n",
+      true
+    )
+    vim.cmd("wincmd p")
+    _G.terminal_startinsert_able = true
   end
 }

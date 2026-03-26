@@ -1,0 +1,18 @@
+# Compiled binaries
+*.out
+
+# Backup files
+*~
+
+# Temporary files
+tmp.*
+tmp
+
+# Lazy.nvim lock file
+lazy-lock.json
+
+# Neovim tips (personal notes)
+neovim_tips/
+
+# Trash
+_trash/

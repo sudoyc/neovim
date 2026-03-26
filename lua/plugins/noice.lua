@@ -2,6 +2,7 @@ return {
   "folke/noice.nvim",
   -- event = { "CmdlineEnter", "BufRead" },
   event = "VeryLazy",
+
   -- enabled = false,
   opts = {
     lsp = {

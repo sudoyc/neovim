@@ -2,10 +2,41 @@ vim.g.mapleader = " "
 
 local set = vim.keymap.set
 
+vim.keymap.set("n", "<Space>", "<Nop>")
+
 set("n", "<a-l>", "<C-w>l")
 set("n", "<a-j>", "<C-w>j")
 set("n", "<a-h>", "<C-w>h")
 set("n", "<a-k>", "<C-w>k")
+
+set("t", "<a-l>", "<C-\\><C-n><C-w>l")
+set("t", "<a-j>", "<C-\\><C-n><C-w>j")
+set("t", "<a-h>", "<C-\\><C-n><C-w>h")
+set("t", "<a-k>", "<C-\\><C-n><C-w>k")
+
+-- something for lsp
+set("n", "<leader>nn", function()
+  vim.ui.input(
+    { prompt = "input the new name" },
+    function (str)
+      if str then
+        vim.lsp.buf.rename(str)
+      end
+    end
+  )
+end, { noremap = true, silent = true })
+-- set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true })
+
+-- something for terminal
+set("n", "<leader>tt", function ()
+  term:toggle()
+end, { noremap = true, silent = true });
+set("n", "<leader>to", function ()
+  term:open()
+end, { noremap = true, silent = true });
+set({"n", "t"}, "<C-t>", function ()
+  term:toggle()
+end, { noremap = true, silent = true });
 
 set("n", "<leader>v", "<C-w>v")
 set("n", "<leader>s", "<C-w>s")
@@ -13,6 +44,13 @@ set("n", "<leader>s", "<C-w>s")
 set("n", "<leader>q", "<C-w>q")
 
 set("n", "<leader>w", "<Cmd>w<CR>", { noremap = true, silent = true })
+-- set("n", "<leader>w", function()
+--   local old = vim.o.lazyredraw
+--   -- vim.api.nvim_command("write")
+--   vim.o.lazyredraw = true
+--   vim.cmd("silent write")
+--   vim.o.lazyredraw = old
+-- end, { noremap = true, silent = true })
 
 for i = 1, 9, 1 do
   set("n", "<leader>" .. i, i .. "<C-w><C-w>")
@@ -55,27 +93,6 @@ end, {
   noremap = true,
 })
 
--- set("n", "<leader>b", function()
---   local dir = vim.fn.expand("%:p:h")
---   local file = vim.fn.expand("%:p")
---   run("cd "..'\\"'..dir..'\\"')
---   run('clear')
---   run("g++ "..'\\"'..file..'\\"'.." -O2 -fsanitize=address,undefined")
---   if vim.fn.filereadable("input.txt") == 1 then
---     run("./a.out < input.txt > output.txt")
---   else
---     run("./a.out")
---   end
--- end)
-
-
--- set("n", "<leader>b", function()
---   local dir = vim.fn.expand("%:p:h")
---   local file = vim.fn.expand("%:p")
---   toggleterm.exec("clear")
---   toggleterm.exec("cd "..dir)
---   toggleterm.exec("g++ "..file.." -O2 -fsanitize=address && ./a.out < input.txt > output.txt")
--- end)
 
 set({"n", "v"}, "<leader>y", "\"+y")
 set({"n", "v"}, "<leader>p", "\"+p")
