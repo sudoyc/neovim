@@ -13,15 +13,15 @@ return {
     event = "VeryLazy",
     opts = {
       mappings = {
-        add = '<leader>a', -- Add surrounding in Normal and Visual modes
-        delete = '<leader>d', -- Delete surrounding
-        find = '<leader>f', -- Find surrounding (to the right)
-        find_left = '<leader>F', -- Find surrounding (to the left)
-        highlight = '<leader>h', -- Highlight surrounding
-        replace = '<leader>r', -- Replace surrounding
+        add = 'gsa',
+        delete = 'gsd',
+        find = 'gsf',
+        find_left = 'gsF',
+        highlight = 'gsh',
+        replace = 'gsr',
 
-        suffix_last = 'l', -- Suffix to search with "prev" method
-        suffix_next = 'n', -- Suffix to search with "next" method
+        suffix_last = 'l',
+        suffix_next = 'n',
       },
     }
   },

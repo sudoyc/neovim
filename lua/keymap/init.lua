@@ -15,7 +15,7 @@ set("t", "<a-h>", "<C-\\><C-n><C-w>h")
 set("t", "<a-k>", "<C-\\><C-n><C-w>k")
 
 -- something for lsp
-set("n", "<leader>nn", function()
+set("n", "<leader>n", function()
   vim.ui.input(
     { prompt = "input the new name" },
     function (str)
@@ -28,12 +28,6 @@ end, { noremap = true, silent = true })
 -- set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true })
 
 -- something for terminal
-set("n", "<leader>tt", function ()
-  term:toggle()
-end, { noremap = true, silent = true });
-set("n", "<leader>to", function ()
-  term:open()
-end, { noremap = true, silent = true });
 set({"n", "t"}, "<C-t>", function ()
   term:toggle()
 end, { noremap = true, silent = true });
@@ -76,7 +70,7 @@ end)
 --   end
 -- end
 
-set("n", "<leader>b", function()
+set("n", "<leader>r", function()
   vim.cmd("cd %:h")
   if (vim.b.run_command ~= nil) then
     vim.b.run_command()
@@ -86,7 +80,20 @@ end, {
   noremap = true,
 })
 
-set("n", "<leader>ft", function()
+set("n", "<leader>R", function()
+  vim.cmd("cd %:h")
+  if vim.b.pick_run ~= nil then
+    vim.b.pick_run()
+  end
+end, { silent = true, noremap = true })
+
+set("n", "<leader>S", function()
+  if vim.b.pick_std ~= nil then
+    vim.b.pick_std()
+  end
+end, { silent = true, noremap = true })
+
+set("n", "<leader>F", function()
   vim.lsp.buf.format({ async = true })
 end, {
   silent = true,
