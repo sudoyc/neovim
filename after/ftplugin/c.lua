@@ -14,7 +14,13 @@ end
 vim.b.run_command = function()
   local last = utils.get_last_run("c")
   if last then
-    utils.compile_and_run(last.compiler, last.flags, last.io_mode)
+    if last.compile_only then
+      local dir = vim.fn.expand("%:p:h")
+      local file = vim.fn.expand("%:p")
+      utils.run(('clear && cd "%s" && clear && %s "%s" %s && echo build done'):format(dir, last.compiler, file, last.flags))
+    else
+      utils.compile_and_run(last.compiler, last.flags)
+    end
   else
     utils.compile_and_run("gcc", c_std() .. " -O2 -fsanitize=address,undefined")
   end
@@ -38,14 +44,19 @@ end
 
 vim.b.pick_run = function()
   local std = c_std()
-  utils.pick("运行方式", {
-    { text = "Debug + sanitizer + 直接运行",   compiler = "gcc", flags = std .. " -g -fsanitize=address,undefined", io_mode = "direct" },
-    { text = "Debug + sanitizer + input.txt",  compiler = "gcc", flags = std .. " -g -fsanitize=address,undefined", io_mode = "input_output" },
-    { text = "Release (-O2) + 直接运行",       compiler = "gcc", flags = std .. " -O2", io_mode = "direct" },
-    { text = "Release (-O3) + 直接运行",       compiler = "gcc", flags = std .. " -O3", io_mode = "direct" },
-    { text = "仅编译",                         compiler = "gcc", flags = std .. " -O2", io_mode = "compile_only" },
+  utils.pick("编译方式", {
+    { text = "Debug + sanitizer",   compiler = "gcc", flags = std .. " -g -fsanitize=address,undefined" },
+    { text = "Release (-O2)",       compiler = "gcc", flags = std .. " -O2" },
+    { text = "Release (-O3)",       compiler = "gcc", flags = std .. " -O3" },
+    { text = "仅编译  (-O2)",       compiler = "gcc", flags = std .. " -O2", compile_only = true },
   }, function(item)
-    utils.set_last_run("c", { compiler = item.compiler, flags = item.flags, io_mode = item.io_mode })
-    utils.compile_and_run(item.compiler, item.flags, item.io_mode)
+    utils.set_last_run("c", { compiler = item.compiler, flags = item.flags, compile_only = item.compile_only })
+    if item.compile_only then
+      local dir = vim.fn.expand("%:p:h")
+      local file = vim.fn.expand("%:p")
+      utils.run(('clear && cd "%s" && clear && %s "%s" %s && echo build done'):format(dir, item.compiler, file, item.flags))
+    else
+      utils.compile_and_run(item.compiler, item.flags)
+    end
   end)
 end

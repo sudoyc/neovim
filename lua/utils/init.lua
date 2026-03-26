@@ -7,9 +7,13 @@ function M.load_build_config()
   if ok and cfg then
     _G.cpp_std = cfg.cpp_std or "c++20"
     _G.last_run = cfg.last_run or {}
+    _G.use_input = cfg.use_input or false
+    _G.use_output = cfg.use_output or false
   else
     _G.cpp_std = _G.cpp_std or "c++20"
     _G.last_run = _G.last_run or {}
+    _G.use_input = _G.use_input or false
+    _G.use_output = _G.use_output or false
   end
 end
 
@@ -17,6 +21,8 @@ function M.save_build_config()
   local content = "return " .. vim.inspect({
     cpp_std = _G.cpp_std,
     last_run = _G.last_run,
+    use_input = _G.use_input,
+    use_output = _G.use_output,
   }) .. "\n"
   vim.fn.writefile(vim.split(content, "\n"), config_path)
 end
@@ -50,16 +56,14 @@ function M.run(exec)
   _G.terminal_startinsert_able = true
 end
 
-function M.compile_and_run(compiler, flags, io_mode)
+function M.compile_and_run(compiler, flags)
   local dir = vim.fn.expand("%:p:h")
   local file = vim.fn.expand("%:p")
   local cmd = ('clear && cd "%s" && clear && %s "%s" %s && echo build done && '):format(dir, compiler, file, flags)
-  if io_mode == "input" then
-    cmd = cmd .. "./a.out < input.txt"
-  elseif io_mode == "input_output" then
+  if _G.use_input and _G.use_output then
     cmd = cmd .. "./a.out < input.txt > output.txt"
-  elseif io_mode == "compile_only" then
-    cmd = cmd .. "echo done"
+  elseif _G.use_input then
+    cmd = cmd .. "./a.out < input.txt"
   else
     cmd = cmd .. "./a.out"
   end

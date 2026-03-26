@@ -24,6 +24,9 @@ return {
       scroll = { enabled = false },
       statuscolumn = { enabled = true },
       words = { enabled = true },
+      toggle = { enabled = true },
+      scratch = { enabled = true },
+      rename = { enabled = true },
       image = { enabled = true },
     }
     require("snacks").setup(opts)
@@ -73,5 +76,12 @@ return {
     { "<leader>gg", function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
     { "<leader>gb", function() Snacks.picker.grep_buffers() end,                            desc = "Grep Open Buffers" },
     { "<leader>gw", function() Snacks.picker.grep_word() end,                               desc = "Visual selection or word", mode = { "n", "x" } },
+    -- toggle
+    { "<leader>ti", function() Snacks.toggle({ name = "Input (input.txt)", get = function() return _G.use_input end, set = function(v) _G.use_input = v; require("utils").save_build_config() end }):toggle() end, desc = "Toggle input.txt" },
+    { "<leader>to", function() Snacks.toggle({ name = "Output (output.txt)", get = function() return _G.use_output end, set = function(v) _G.use_output = v; require("utils").save_build_config() end }):toggle() end, desc = "Toggle output.txt" },
+    -- scratch
+    { "<leader>os", function() Snacks.scratch() end, desc = "Scratch Buffer" },
+    -- rename file
+    { "<leader>mv", function() Snacks.rename.rename_file() end, desc = "Rename File" },
   }
 }

@@ -3,7 +3,7 @@ local utils = require("utils")
 vim.b.run_command = function()
   local last = utils.get_last_run("cpp")
   if last then
-    utils.compile_and_run(last.compiler, last.flags, last.io_mode)
+    utils.compile_and_run(last.compiler, last.flags)
   else
     utils.compile_and_run("g++", "-std=" .. _G.cpp_std .. " -O2 -fsanitize=address,undefined")
   end
@@ -27,15 +27,19 @@ end
 
 vim.b.pick_run = function()
   local std = "-std=" .. _G.cpp_std
-  utils.pick("运行方式", {
-    { text = "OJ模式 + input.txt  (-O2 -DONLINE_JUDGE)",  compiler = "g++", flags = std .. " -O2 -DONLINE_JUDGE", io_mode = "input_output" },
-    { text = "OJ模式 + 直接运行   (-O2 -DONLINE_JUDGE)",  compiler = "g++", flags = std .. " -O2 -DONLINE_JUDGE", io_mode = "direct" },
-    { text = "Debug + sanitizer + 直接运行",               compiler = "g++", flags = std .. " -g -fsanitize=address,undefined", io_mode = "direct" },
-    { text = "Debug + sanitizer + input.txt",              compiler = "g++", flags = std .. " -g -fsanitize=address,undefined", io_mode = "input_output" },
-    { text = "Release (-O3) + 直接运行",                   compiler = "g++", flags = std .. " -O3", io_mode = "direct" },
-    { text = "仅编译",                                     compiler = "g++", flags = std .. " -O2", io_mode = "compile_only" },
+  utils.pick("编译方式", {
+    { text = "OJ模式  (-O2 -DONLINE_JUDGE)",       compiler = "g++", flags = std .. " -O2 -DONLINE_JUDGE" },
+    { text = "Debug + sanitizer",                  compiler = "g++", flags = std .. " -g -fsanitize=address,undefined" },
+    { text = "Release (-O3)",                      compiler = "g++", flags = std .. " -O3" },
+    { text = "仅编译  (-O2)",                      compiler = "g++", flags = std .. " -O2", compile_only = true },
   }, function(item)
-    utils.set_last_run("cpp", { compiler = item.compiler, flags = item.flags, io_mode = item.io_mode })
-    utils.compile_and_run(item.compiler, item.flags, item.io_mode)
+    utils.set_last_run("cpp", { compiler = item.compiler, flags = item.flags, compile_only = item.compile_only })
+    if item.compile_only then
+      local dir = vim.fn.expand("%:p:h")
+      local file = vim.fn.expand("%:p")
+      utils.run(('clear && cd "%s" && clear && %s "%s" %s && echo build done'):format(dir, item.compiler, file, item.flags))
+    else
+      utils.compile_and_run(item.compiler, item.flags)
+    end
   end)
 end
