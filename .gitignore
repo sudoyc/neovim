@@ -16,3 +16,6 @@ neovim_tips/
 
 # Trash
 _trash/
+
+# Build config (持久化编译选项)
+.build_config.lua
