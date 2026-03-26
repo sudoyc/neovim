@@ -6,10 +6,10 @@ function M.load_build_config()
   local ok, cfg = pcall(dofile, config_path)
   if ok and cfg then
     _G.cpp_std = cfg.cpp_std or "c++20"
-    _G.last_run = cfg.last_run or nil
+    _G.last_run = cfg.last_run or {}
   else
     _G.cpp_std = _G.cpp_std or "c++20"
-    _G.last_run = _G.last_run or nil
+    _G.last_run = _G.last_run or {}
   end
 end
 
@@ -19,6 +19,18 @@ function M.save_build_config()
     last_run = _G.last_run,
   }) .. "\n"
   vim.fn.writefile(vim.split(content, "\n"), config_path)
+end
+
+-- 获取指定语言的上次运行配置
+function M.get_last_run(lang)
+  return _G.last_run and _G.last_run[lang] or nil
+end
+
+-- 保存指定语言的运行配置
+function M.set_last_run(lang, config)
+  _G.last_run = _G.last_run or {}
+  _G.last_run[lang] = config
+  M.save_build_config()
 end
 
 M.load_build_config()

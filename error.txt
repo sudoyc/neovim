@@ -1,7 +1,0 @@
-Lua callback: ...al/share/nvim/lazy/toggleterm.nvim/lua/toggleterm/ui.lua:360: Vim:E444: 不能关闭最后一个窗口
-stack traceback:
-	[C]: in function 'nvim_win_close'
-	...al/share/nvim/lazy/toggleterm.nvim/lua/toggleterm/ui.lua:360: in function 'close_split'
-	...al/share/nvim/lazy/toggleterm.nvim/lua/toggleterm/ui.lua:396: in function 'close'
-	...re/nvim/lazy/toggleterm.nvim/lua/toggleterm/terminal.lua:288: in function 'close'
-	...re/nvim/lazy/toggleterm.nvim/lua/toggleterm/terminal.lua:366: in function <...re/nvim/lazy/toggleterm.nvim/lua/toggleterm/terminal.lua:363>

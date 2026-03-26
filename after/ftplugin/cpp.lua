@@ -1,8 +1,9 @@
 local utils = require("utils")
 
 vim.b.run_command = function()
-  if _G.last_run then
-    utils.compile_and_run(_G.last_run.compiler, _G.last_run.flags, _G.last_run.io_mode)
+  local last = utils.get_last_run("cpp")
+  if last then
+    utils.compile_and_run(last.compiler, last.flags, last.io_mode)
   else
     utils.compile_and_run("g++", "-std=" .. _G.cpp_std .. " -O2 -fsanitize=address,undefined")
   end
@@ -16,8 +17,7 @@ vim.b.pick_std = function()
     { text = "C++14", std = "c++14" },
   }, function(item)
     _G.cpp_std = item.std
-    _G.last_run = nil
-    utils.save_build_config()
+    utils.set_last_run("cpp", nil)
     local dir = vim.fn.expand("%:p:h")
     vim.fn.writefile({ "-std=" .. item.std }, dir .. "/compile_flags.txt")
     vim.notify("已设置 " .. item.text .. "，正在重启 clangd...", vim.log.levels.INFO)
@@ -35,8 +35,7 @@ vim.b.pick_run = function()
     { text = "Release (-O3) + 直接运行",                   compiler = "g++", flags = std .. " -O3", io_mode = "direct" },
     { text = "仅编译",                                     compiler = "g++", flags = std .. " -O2", io_mode = "compile_only" },
   }, function(item)
-    _G.last_run = { compiler = item.compiler, flags = item.flags, io_mode = item.io_mode }
-    utils.save_build_config()
+    utils.set_last_run("cpp", { compiler = item.compiler, flags = item.flags, io_mode = item.io_mode })
     utils.compile_and_run(item.compiler, item.flags, item.io_mode)
   end)
 end
