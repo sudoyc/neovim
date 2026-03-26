@@ -39,6 +39,7 @@ _G.terminal_startinsert_able = true
 
 vim.api.nvim_create_autocmd("BufEnter", {
   callback = function()
+    if not vim.api.nvim_buf_is_valid(0) then return end
     local bt = vim.api.nvim_get_option_value("buftype", { buf = 0 })
     if bt == "terminal" and terminal_startinsert_able == true then
       vim.cmd("startinsert")
