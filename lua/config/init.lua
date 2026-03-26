@@ -69,11 +69,46 @@ vim.diagnostic.config({
   }
 })
 
--- 自动刷新缓冲区
+-- 自动刷新缓冲区（基于 libuv fs_event，真正的文件系统监听）
 vim.o.autoread = true
-vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
-  command = "if mode() != 'c' | checktime | endif",
-  pattern = { "*" },
+
+local watchers = {} -- bufnr -> uv_fs_event handle
+
+local function watch_buf(bufnr)
+  if watchers[bufnr] then return end
+  local path = vim.api.nvim_buf_get_name(bufnr)
+  if path == "" or vim.fn.filereadable(path) == 0 then return end
+
+  local handle = vim.uv.new_fs_event()
+  if not handle then return end
+
+  handle:start(path, {}, vim.schedule_wrap(function(err, _, _)
+    if err then return end
+    if vim.api.nvim_buf_is_valid(bufnr) then
+      vim.api.nvim_buf_call(bufnr, function()
+        vim.cmd("checktime")
+      end)
+    end
+  end))
+
+  watchers[bufnr] = handle
+end
+
+local function unwatch_buf(bufnr)
+  local handle = watchers[bufnr]
+  if handle then
+    handle:stop()
+    handle:close()
+    watchers[bufnr] = nil
+  end
+end
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufEnter" }, {
+  callback = function(ev) watch_buf(ev.buf) end,
+})
+
+vim.api.nvim_create_autocmd("BufUnload", {
+  callback = function(ev) unwatch_buf(ev.buf) end,
 })
 
 -- save the cursor posistion
