@@ -19,3 +19,8 @@ _trash/
 
 # Build config (持久化编译选项)
 .build_config.lua
+
+# 运行时生成的 IO 文件
+input.txt
+output.txt
+compile_flags.txt
