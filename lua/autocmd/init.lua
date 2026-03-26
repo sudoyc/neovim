@@ -11,28 +11,24 @@ vim.api.nvim_create_autocmd({"BufNewFile"}, {
 -- 自动创建父目录
 vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function(event)
-    -- local file = event.match
-    local file = vim.api.nvim_buf_get_name(0)
-    local dir = vim.fn.simplify(vim.fn.fnamemodify(file, ":p:h"))
-    -- print(dir);
+    local dir = vim.fn.fnamemodify(event.match, ":p:h")
     if vim.fn.isdirectory(dir) == 0 then
       vim.fn.mkdir(dir, "p")
     end
-    -- vim.cmd("silent lcd " .. dir)
   end,
 })
 
--- 设定当前window的目录为文件目录
-vim.api.nvim_create_autocmd({"BufWinEnter", "BufEnter"}, {
+-- 设定当前 window 的目录为文件目录
+vim.api.nvim_create_autocmd("BufEnter", {
   callback = function(event)
-    if vim.fn.filereadable(event.match) == 0 then
-      return
-    end
-    local dir = vim.fn.simplify(vim.fn.expand("%:h"))
+    if vim.bo[event.buf].buftype ~= "" then return end
+    local file = event.match
+    if vim.fn.filereadable(file) == 0 then return end
+    local dir = vim.fn.fnamemodify(file, ":p:h")
     if dir ~= "" then
-      vim.cmd("silent lcd " .. dir)
+      vim.cmd("silent lcd " .. vim.fn.fnameescape(dir))
     end
-  end
+  end,
 })
 
 _G.terminal_startinsert_able = true
