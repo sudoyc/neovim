@@ -33,8 +33,7 @@ return {
         }
       },
       sections = {
-        lualine_a = { 'mode' },
-        lualine_a = { window },
+        lualine_a = { window, 'mode' },
         lualine_b = { 'branch', 'diff', 'diagnostics' },
         lualine_c = { 'filename' },
         lualine_x = { 'encoding', 'fileformat', 'filetype', get_words },
@@ -42,8 +41,7 @@ return {
         lualine_z = { 'location' }
       },
       inactive_sections = {
-        lualine_a = { 'mode' },
-        lualine_a = { window },
+        lualine_a = { window, 'mode' },
         lualine_b = { 'branch', 'diff', 'diagnostics' },
         lualine_c = { 'filename' },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },

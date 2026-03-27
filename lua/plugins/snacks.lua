@@ -36,13 +36,13 @@ return {
       name = "Input (input.txt)",
       get = function() return _G.use_input end,
       set = function(v) _G.use_input = v; require("utils").save_build_config() end,
-    }):map("<leader>ti")
+    }):map("<leader>Ti")
 
     Snacks.toggle({
       name = "Output (output.txt)",
       get = function() return _G.use_output end,
       set = function(v) _G.use_output = v; require("utils").save_build_config() end,
-    }):map("<leader>to")
+    }):map("<leader>To")
     -- vim.api.nvim_create_autocmd("User", {
     --   pattern = "SnacksDashboardOpened",
     --   callback = function(ev)
@@ -93,5 +93,14 @@ return {
     { "<leader>os", function() Snacks.scratch() end, desc = "Scratch Buffer" },
     -- rename file
     { "<leader>mv", function() Snacks.rename.rename_file() end, desc = "Rename File" },
+    -- lsp rename
+    { "<leader>n", function()
+      local word = vim.fn.expand("<cword>")
+      Snacks.input({ prompt = "Rename: ", default = word }, function(new_name)
+        if new_name and new_name ~= "" then
+          vim.lsp.buf.rename(new_name)
+        end
+      end)
+    end, desc = "LSP Rename" },
   }
 }

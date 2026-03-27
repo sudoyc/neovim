@@ -20,8 +20,8 @@
 | `<leader>r` | 编译运行（记忆上次参数） |
 | `<leader>R` | 选择编译方式 |
 | `<leader>S` | 选择 C/C++ 标准 |
-| `<leader>ti` | 切换 `input.txt` 重定向 |
-| `<leader>to` | 切换 `output.txt` 重定向 |
+| `<leader>Ti` | 切换 `input.txt` 重定向 |
+| `<leader>To` | 切换 `output.txt` 重定向 |
 
 ### 文件 / 编辑
 

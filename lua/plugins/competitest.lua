@@ -3,6 +3,10 @@ return {
   dependencies = 'MunifTanjim/nui.nvim',
   lazy = true,
   ft = { "cpp" },
+  keys = {
+    { "<leader>i", "<Cmd>CompetiTest run<CR>", desc = "CompetiTest run" },
+    { "<leader>c", "<Cmd>CompetiTest receive testcases<CR>", desc = "CompetiTest receive testcases" },
+  },
   config = function()
     require('competitest').setup {
       local_config_file_name = ".competitest.lua",

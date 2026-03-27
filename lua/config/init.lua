@@ -14,21 +14,23 @@ local M = {
   undofile       = true,
   shiftwidth     = 2,
   termguicolors  = true,
-  backup         = false,
-  expandtab      = true,
-  hlsearch       = false,
   backup         = true,
+  hlsearch       = false,
   updatetime     = 1000,
   signcolumn     = "yes",
   cinoptions     = "g0l1Ls(0j1,(0,ws,Ws",
   splitbelow     = true,
   splitright     = true,
-  -- guicursor      = "",
+  autoread       = true,
+  pumblend       = 10,
 }
 
 for key, val in pairs(M) do
   vim.o[key] = val
 end
+
+vim.opt.completeopt = { 'menu', 'menuone', 'noselect', 'noinsert' }
+vim.opt.wildoptions:append('pum')
 
 require("config.lazy")
 
@@ -37,19 +39,6 @@ vim.cmd.colorscheme("tokyonight")
 vim.lsp.enable("clangd")
 vim.lsp.enable("lua_ls")
 vim.lsp.enable("pyright")
-
--- local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
--- for type, icon in pairs(signs) do
---   local hl = "LspDiagnosticsSign" .. type
---   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
--- end
-
--- local sign = { Error = '', Hint = 'ﴞ', Info = '', Warn = '', }
--- for name_, text_ in pairs(sign) do
---   local set_sign = vim.fn.sign_define
---   local temp = "DiagnosticSign" .. name_
---   set_sign(temp, {text = text_, texthl = temp, numhl = 'DiagnosticDefault' .. name_})
--- end
 
 vim.diagnostic.config({
   virtual_text = {
@@ -61,69 +50,12 @@ vim.diagnostic.config({
   },
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = "",
-      [vim.diagnostic.severity.WARN]  = "",
-      [vim.diagnostic.severity.INFO]  = "",
-      [vim.diagnostic.severity.HINT]  = "",
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN]  = "",
+      [vim.diagnostic.severity.INFO]  = "",
+      [vim.diagnostic.severity.HINT]  = "",
     },
   }
 })
-
--- 自动刷新缓冲区（基于 libuv fs_event，真正的文件系统监听）
-vim.o.autoread = true
-
-local watchers = {} -- bufnr -> uv_fs_event handle
-
-local function watch_buf(bufnr)
-  if watchers[bufnr] then return end
-  local path = vim.api.nvim_buf_get_name(bufnr)
-  if path == "" or vim.fn.filereadable(path) == 0 then return end
-
-  local handle = vim.uv.new_fs_event()
-  if not handle then return end
-
-  handle:start(path, {}, vim.schedule_wrap(function(err, _, _)
-    if err then return end
-    if vim.api.nvim_buf_is_valid(bufnr) then
-      vim.api.nvim_buf_call(bufnr, function()
-        vim.cmd("checktime")
-      end)
-    end
-  end))
-
-  watchers[bufnr] = handle
-end
-
-local function unwatch_buf(bufnr)
-  local handle = watchers[bufnr]
-  if handle then
-    handle:stop()
-    handle:close()
-    watchers[bufnr] = nil
-  end
-end
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufEnter" }, {
-  callback = function(ev) watch_buf(ev.buf) end,
-})
-
-vim.api.nvim_create_autocmd("BufUnload", {
-  callback = function(ev) unwatch_buf(ev.buf) end,
-})
-
--- save the cursor posistion
-vim.api.nvim_create_autocmd("BufReadPost", {
-  callback = function()
-    local mark = vim.api.nvim_buf_get_mark(0, '"')
-    local lcount = vim.api.nvim_buf_line_count(0)
-    if mark[1] > 0 and mark[1] <= lcount then
-      pcall(vim.api.nvim_win_set_cursor, 0, mark)
-    end
-  end,
-})
-
-vim.opt.pumblend = 10 -- 半透明效果（可選）
-vim.opt.completeopt = { 'menu', 'menuone', 'noselect', 'noinsert' }
-vim.opt.wildoptions:append('pum') -- 啟用浮動而非壓縮
 
 return {}

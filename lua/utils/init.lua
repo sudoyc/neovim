@@ -43,10 +43,10 @@ M.load_build_config()
 
 function M.run(exec)
   _G.terminal_startinsert_able = false
-  if term:is_open() == false then
-    term:open()
+  if run_term:is_open() == false then
+    run_term:open()
   end
-  term:send(exec)
+  run_term:send(exec)
   vim.api.nvim_feedkeys(
     vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true),
     "n",
