@@ -13,6 +13,7 @@ set("t", "<a-l>", "<C-\\><C-n><C-w>l")
 set("t", "<a-j>", "<C-\\><C-n><C-w>j")
 set("t", "<a-h>", "<C-\\><C-n><C-w>h")
 set("t", "<a-k>", "<C-\\><C-n><C-w>k")
+set("t", "<Esc>", "<C-\\><C-n>")
 
 set("n", "<leader>v", "<C-w>v")
 set("n", "<leader>s", "<C-w>s")

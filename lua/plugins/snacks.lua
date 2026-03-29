@@ -1,6 +1,6 @@
 return {
   "folke/snacks.nvim",
-  dependencies = { "3rd/image.nvim" },
+  dependencies = {},
   priority = 1000,
   lazy = false,
   ---@type snacks.Config
@@ -27,7 +27,7 @@ return {
       toggle = { enabled = true },
       scratch = { enabled = true },
       rename = { enabled = true },
-      image = { enabled = true },
+      image = { enabled = false },
     }
     require("snacks").setup(opts)
 

@@ -37,10 +37,13 @@
 
 | 键 | 功能 |
 |---|---|
-| `<leader>ff` | 查找文件 |
+| `<leader>ff` | 查找文件（从 `~/` 开始） |
+| `<leader>fg` | 查找 git 追踪的文件 |
 | `<leader>fr` | 最近文件 |
 | `<leader>fb` | 打开的 buffer |
+| `<leader>fp` | 项目列表 |
 | `<leader>gg` | 当前文件搜索 |
+| `<leader>gb` | 在所有打开的 buffer 里 grep |
 | `<leader>gw` | 搜索当前词 |
 | `gd` | 跳转到定义 |
 
@@ -48,11 +51,26 @@
 
 | 键 | 功能 |
 |---|---|
-| `<C-t>` | 切换终端 |
+| `<C-t>` | 切换运行终端 |
+| `<leader>t` | 切换 shell 终端（可用数字前缀开多个） |
+| `<Esc>` | 终端 normal 模式 |
 | `alt+hjkl` | 窗口间移动 |
 | `<leader>v` | 垂直分屏 |
 | `<leader>s` | 水平分屏 |
 | `<leader>q` | 关闭窗口 |
+| `<leader>1~9` | 跳转到第 n 个窗口 |
+
+### Claude Code
+
+| 键 | 功能 |
+|---|---|
+| `<leader>ac` | 打开/关闭 Claude 面板 |
+| `<leader>af` | 聚焦 Claude 面板 |
+| `<leader>ar` | 恢复上次会话 |
+| `<leader>as` | 发送选中代码给 Claude（visual） |
+| `<leader>ab` | 把当前文件加入 Claude 上下文 |
+| `<leader>aa` | 接受 Claude 提出的 diff |
+| `<leader>ad` | 拒绝 Claude 提出的 diff |
 
 ## 目录结构
 

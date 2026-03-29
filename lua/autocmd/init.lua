@@ -19,30 +19,32 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 })
 
 -- 设定当前 window 的目录为文件目录
-vim.api.nvim_create_autocmd("BufEnter", {
-  callback = function(event)
-    if vim.bo[event.buf].buftype ~= "" then return end
-    local file = event.match
-    if vim.fn.filereadable(file) == 0 then return end
-    local dir = vim.fn.fnamemodify(file, ":p:h")
-    if dir ~= "" then
-      vim.cmd("silent lcd " .. vim.fn.fnameescape(dir))
-    end
-  end,
+local function lcd_to_file(buf)
+  if vim.bo[buf].buftype ~= "" then return end
+  local file = vim.api.nvim_buf_get_name(buf)
+  if file == "" then return end
+  local dir = vim.fn.fnamemodify(file, ":p:h")
+  if dir ~= "" and vim.fn.isdirectory(dir) == 1 then
+    vim.cmd("silent lcd " .. vim.fn.fnameescape(dir))
+  end
+end
+
+-- BufReadPost：已有文件读完后；BufNewFile：新建文件确定路径后；BufEnter：切换 buffer 时
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufEnter" }, {
+  callback = function(event) lcd_to_file(event.buf) end,
 })
 
--- 进入终端自动 insert 模式
-_G.terminal_startinsert_able = true
-
-vim.api.nvim_create_autocmd("BufEnter", {
-  callback = function()
-    if not vim.api.nvim_buf_is_valid(0) then return end
-    local bt = vim.api.nvim_get_option_value("buftype", { buf = 0 })
-    if bt == "terminal" and terminal_startinsert_able == true then
-      vim.cmd("startinsert")
-    end
-  end,
-})
+-- 进入终端自动 insert 模式（已禁用）
+-- _G.terminal_startinsert_able = true
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   callback = function()
+--     if not vim.api.nvim_buf_is_valid(0) then return end
+--     local bt = vim.api.nvim_get_option_value("buftype", { buf = 0 })
+--     if bt == "terminal" and terminal_startinsert_able == true then
+--       vim.cmd("startinsert")
+--     end
+--   end,
+-- })
 
 -- 恢复光标位置
 vim.api.nvim_create_autocmd("BufReadPost", {
