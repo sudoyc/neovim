@@ -57,8 +57,10 @@ function M.run(exec)
 end
 
 function M.compile_and_run(compiler, flags)
-  local dir = vim.fn.expand("%:p:h")
-  local file = vim.fn.expand("%:p")
+  vim.cmd("silent! write")
+  -- 修复相对路径下创建新文件时的路径解析：先转成绝对路径，再 resolve + simplify
+  local file = vim.fn.resolve(vim.fn.simplify(vim.fn.fnamemodify(vim.fn.expand("%:p"), ":p")))
+  local dir = vim.fn.fnamemodify(file, ":h")
   local cmd = ('clear && cd "%s" && clear && %s "%s" %s && echo build done && '):format(dir, compiler, file, flags)
   if _G.use_input and _G.use_output then
     cmd = cmd .. "./a.out < input.txt > output.txt"

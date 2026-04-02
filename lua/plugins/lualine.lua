@@ -20,12 +20,12 @@ return {
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
         disabled_filetypes = {
-          statusline = { "toggleterm" },
-          winbar = {},
+          statusline = {},
+          winbar = { "toggleterm", "snacks_terminal", "snacks_picker_list", "snacks_picker_input", "snacks_picker_preview" },
         },
         ignore_focus = {},
         always_divide_middle = true,
-        globalstatus = false,
+        globalstatus = true,
         refresh = {
           statusline = 1000,
           tabline = 1000,
@@ -33,24 +33,38 @@ return {
         }
       },
       sections = {
-        lualine_a = { window, 'mode' },
+        lualine_a = { 'mode' },
         lualine_b = { 'branch', 'diff', 'diagnostics' },
-        lualine_c = { 'filename' },
+        lualine_c = {},
         lualine_x = { 'encoding', 'fileformat', 'filetype', get_words },
         lualine_y = { 'progress' },
         lualine_z = { 'location' }
       },
       inactive_sections = {
-        lualine_a = { window, 'mode' },
-        lualine_b = { 'branch', 'diff', 'diagnostics' },
-        lualine_c = { 'filename' },
-        lualine_x = { 'encoding', 'fileformat', 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = { 'location' }
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {}
       },
       tabline = {},
-      winbar = {},
-      inactive_winbar = {},
+      winbar = {
+        lualine_a = { window },
+        lualine_b = { { 'filename', path = 1, fmt = function(str) return vim.fn.fnamemodify(vim.fn.resolve(vim.fn.simplify(vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":p"))), ":~:.") end } },
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {}
+      },
+      inactive_winbar = {
+        lualine_a = { window },
+        lualine_b = { { 'filename', path = 1, fmt = function(str) return vim.fn.fnamemodify(vim.fn.resolve(vim.fn.simplify(vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":p"))), ":~:.") end } },
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {}
+      },
       extensions = {}
     }
   end

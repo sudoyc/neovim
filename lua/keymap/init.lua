@@ -27,7 +27,10 @@ for i = 1, 9, 1 do
 end
 
 set("n", "<leader>r", function()
-  vim.cmd("cd %:h")
+  -- 修复相对路径下创建新文件时的路径解析：先转成绝对路径，再 resolve + simplify
+  local file = vim.fn.resolve(vim.fn.simplify(vim.fn.fnamemodify(vim.fn.expand("%:p"), ":p")))
+  local dir = vim.fn.fnamemodify(file, ":h")
+  vim.cmd("silent cd " .. vim.fn.fnameescape(dir))
   if (vim.b.run_command ~= nil) then
     vim.b.run_command()
   end
@@ -37,7 +40,10 @@ end, {
 })
 
 set("n", "<leader>R", function()
-  vim.cmd("cd %:h")
+  -- 修复相对路径下创建新文件时的路径解析：先转成绝对路径，再 resolve + simplify
+  local file = vim.fn.resolve(vim.fn.simplify(vim.fn.fnamemodify(vim.fn.expand("%:p"), ":p")))
+  local dir = vim.fn.fnamemodify(file, ":h")
+  vim.cmd("silent cd " .. vim.fn.fnameescape(dir))
   if vim.b.pick_run ~= nil then
     vim.b.pick_run()
   end

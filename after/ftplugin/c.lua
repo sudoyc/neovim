@@ -15,8 +15,9 @@ vim.b.run_command = function()
   local last = utils.get_last_run("c")
   if last then
     if last.compile_only then
-      local dir = vim.fn.expand("%:p:h")
-      local file = vim.fn.expand("%:p")
+      vim.cmd("silent! write")
+      local file = vim.fn.resolve(vim.fn.simplify(vim.fn.fnamemodify(vim.fn.expand("%:p"), ":p")))
+      local dir = vim.fn.fnamemodify(file, ":h")
       utils.run(('clear && cd "%s" && clear && %s "%s" %s && echo build done'):format(dir, last.compiler, file, last.flags))
     else
       utils.compile_and_run(last.compiler, last.flags)
@@ -52,8 +53,9 @@ vim.b.pick_run = function()
   }, function(item)
     utils.set_last_run("c", { compiler = item.compiler, flags = item.flags, compile_only = item.compile_only })
     if item.compile_only then
-      local dir = vim.fn.expand("%:p:h")
-      local file = vim.fn.expand("%:p")
+      vim.cmd("silent! write")
+      local file = vim.fn.resolve(vim.fn.simplify(vim.fn.fnamemodify(vim.fn.expand("%:p"), ":p")))
+      local dir = vim.fn.fnamemodify(file, ":h")
       utils.run(('clear && cd "%s" && clear && %s "%s" %s && echo build done'):format(dir, item.compiler, file, item.flags))
     else
       utils.compile_and_run(item.compiler, item.flags)

@@ -23,7 +23,11 @@ local function lcd_to_file(buf)
   if vim.bo[buf].buftype ~= "" then return end
   local file = vim.api.nvim_buf_get_name(buf)
   if file == "" then return end
-  local dir = vim.fn.fnamemodify(file, ":p:h")
+
+  -- 先转成绝对路径，再消除路径中的 .. 和 . 以及符号链接
+  file = vim.fn.resolve(vim.fn.simplify(vim.fn.fnamemodify(file, ":p")))
+
+  local dir = vim.fn.fnamemodify(file, ":h")
   if dir ~= "" and vim.fn.isdirectory(dir) == 1 then
     vim.cmd("silent lcd " .. vim.fn.fnameescape(dir))
   end
@@ -54,6 +58,14 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     if mark[1] > 0 and mark[1] <= lcount then
       pcall(vim.api.nvim_win_set_cursor, 0, mark)
     end
+  end,
+})
+
+-- 锁定 toggleterm 窗口高度
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "toggleterm",
+  callback = function()
+    vim.wo.winfixheight = true
   end,
 })
 
