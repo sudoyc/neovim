@@ -14,7 +14,7 @@ This is a personal Neovim configuration using lazy.nvim as the plugin manager. T
 - `lua/config/lazy.lua` — lazy.nvim bootstrap and plugin loader (auto-imports `lua/plugins/`)
 - `lua/keymap/init.lua` — global keybindings (leader = Space, localleader = `\`)
 - `lua/autocmd/init.lua` — autocommands (auto-mkdir, auto-cd, cursor restore, skeleton templates, etc.)
-- `lua/utils/init.lua` — utility module: `run(exec)` 发送命令到 toggleterm，`compile_and_run(compiler, flags, io_mode)` 编译运行，`pick(title, items, on_confirm)` 通用 snacks picker，`restart_clangd()` 重启 LSP，`load/save_build_config()` 持久化编译选项到 `.build_config.lua`
+- `lua/utils/init.lua` — utility module: `run(exec)` 发送命令到 toggleterm，`compile_and_run(compiler, flags)` 编译运行（io 重定向由 `_G.use_input`/`_G.use_output` 全局变量控制），`pick(title, items, on_confirm)` 通用 snacks picker，`restart_clangd()` 重启 LSP，`load/save_build_config()` 持久化编译选项到 `.build_config.lua`
 
 **LSP setup:** Uses native Neovim LSP (`vim.lsp.Config`) without nvim-lspconfig. Each server has its own file in `lsp/` (clangd, pyright, lua_ls). `LspRestart` 不可用，用 `utils.restart_clangd()` 代替。
 

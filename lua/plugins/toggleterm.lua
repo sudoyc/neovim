@@ -3,7 +3,7 @@ return {
   version = "*",
   lazy = false,
   keys = {
-    { "<C-t>", function() run_term:toggle() end, mode = {"n"}, desc = "Toggle run terminal" },
+    { "<C-t>", function() run_term:toggle() end, mode = {"n", "t"}, desc = "Toggle run terminal" },
     { "<leader>t", function() _G.toggle_shell_term(vim.v.count ~= 0 and vim.v.count or nil) end, mode = {"n"}, desc = "Toggle shell terminal" },
   },
   config = function()
